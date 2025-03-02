@@ -1,4 +1,4 @@
-# OpenTelemetry Proof of Concept with Go, Loki, Tempo, Prometheus, and Grafana
+# Go stack yourself
 
 This project is a Proof of Concept (PoC) aimed at demonstrating how to implement OpenTelemetry in a Go-based application. It integrates logs, traces, and metrics collection using Loki, Tempo, and Prometheus, visualized through Grafana. The backend is built using Go and `templ`, while the frontend leverages `htmx` and `scss`.
 
