@@ -1,0 +1,21 @@
+{
+  "name": "go-stack-yourself",
+  "version": "0.0.1",
+  "description": "Demo application for golang, templ, htmx stack app with open-telemetry",
+  "main": "index.js",
+  "scripts": {
+    "watch": "node build.dev.js --watch",
+    "build": "node build.dev.js"
+  },
+  "type": "module",
+  "author": "FullKernelPanic",
+  "license": "MIT",
+  "dependencies": {
+    "htmx.org": "^1.9.12"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.0",
+    "esbuild-sass-plugin": "^3.3.1",
+    "uglify-js": "^3.19.3"
+  }
+}

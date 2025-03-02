@@ -1,0 +1,102 @@
+services:
+  app:
+    container_name: app
+    build:
+      target: dev
+      context: .
+      dockerfile: .docker/app/Dockerfile
+    command: >
+      air -c .air.app.toml && cd web && npm run build
+    volumes:
+      - ./:/opt/app/
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:11.5.1
+    volumes:
+      - ./.docker/grafana/home.json:/etc/grafana/provisioning/dashboards/home.json
+      - ./.docker/grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yaml
+      - grafana-storage:/var/lib/grafana
+    environment:
+      - GF_ORG_NAME=Go Stack Yourself
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+      - GF_FEATURE_TOGGLES_ENABLE=traceqlEditor
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+      - GF_SERVER_HTTP_PORT=8081
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/dashboards/home.json
+
+  loki:
+    container_name: loki
+    image: grafana/loki:3.4.1
+    command:
+      - --config.file=/etc/loki/loki-config.yaml
+      - --config.expand-env=true
+    volumes:
+      - ./.docker/loki/loki-config.yaml:/etc/loki/loki-config.yaml
+      - loki-storage:/loki
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v3.1.0
+    command:
+      - --config.file=/etc/prometheus.yaml
+      - --web.enable-remote-write-receiver
+      - --enable-feature=exemplar-storage
+      - --enable-feature=native-histograms
+    volumes:
+      - ./.docker/prometheus/prometheus.yaml:/etc/prometheus.yaml
+      - prometheus-storage:/prometheus
+
+  tempo:
+    container_name: tempo
+    image: grafana/tempo:2.7.1
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./.docker/tempo/tempo.yaml:/etc/tempo.yaml
+      - tempo-storage:/var/tempo
+    depends_on:
+      - memcached
+    ports:
+      - "3200:3200"
+
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector:0.119.0
+    command: [ "--config=/etc/otel-collector.yaml" ]
+    volumes:
+      - ./.docker/otel-collector/otel-collector.yaml:/etc/otel-collector.yaml
+    depends_on:
+      - tempo
+      - loki
+      - prometheus
+
+  memcached:
+    image: memcached:1.6.36-alpine
+    command:
+      - --conn-limit=1024
+      - --memory-limit=64
+      - --threads=4
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+
+  webserver:
+    container_name: webserver
+    build:
+      context: .
+      dockerfile: ./.docker/nginx/Dockerfile
+    volumes:
+      - ./public:/opt/web_static
+    ports:
+      - "8081:80"
+
+
+volumes:
+  tempo-storage:
+  grafana-storage:
+  prometheus-storage:
+  loki-storage:

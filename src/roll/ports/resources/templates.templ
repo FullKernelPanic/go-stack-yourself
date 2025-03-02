@@ -1,0 +1,45 @@
+package ports
+
+templ RollResultUser(name string, value string) {
+	<p>{ name } is rolling { value }</p>
+}
+
+templ RollResultAnonym(value string) {
+	<p>Anonymous player is rolling { value }</p>
+}
+
+templ DiceRollHome() {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png"/>
+			<link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png"/>
+			<link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png"/>
+			<link rel="manifest" href="/static/site.webmanifest"/>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>Roll Dice</title>
+			<link rel="stylesheet" href="/static/scss/main.css"/>
+		</head>
+		<body>
+			<fieldset class="custom-legend">
+				<legend>Keep Rolling!</legend>
+				<form
+					hx-get="rolldice/"
+					hx-trigger="submit"
+					hx-target="#roll-result"
+					hx-swap="innerHTML"
+				>
+					<label>
+						<input type="text" class="input-field" placeholder="Add your name, or not" name="player"/>
+					</label>
+					<section class="info-section" id="roll-result">
+						<p>Press button and see your dice roll</p>
+					</section>
+					<button type="submit" class="submit-button">Roll It!</button>
+				</form>
+			</fieldset>
+			<script src="/static/js/main.js"></script>
+		</body>
+	</html>
+}

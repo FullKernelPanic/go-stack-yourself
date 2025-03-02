@@ -1,0 +1,81 @@
+@use 'sass:color';
+
+// Variables for reusable styling
+$primary-color: #3498db;
+$secondary-color: #ffffff;
+$border-color: #dcdcdc;
+$text-color: #333;
+$font-family: 'Arial', sans-serif;
+
+// Styling for the fieldset and legend
+.custom-legend {
+  width: 50%;                    // Limit with a fixed width
+  max-width: 600px;              // Maximum width for responsiveness
+  margin: 50px auto;             // Center the fieldset horizontally and add space at the top
+  border: 1px solid $border-color;
+  padding: 20px;
+  border-radius: 8px;
+  font-family: $font-family;
+  text-align: center;            // Center everything inside
+
+  // Legend styling
+  legend {
+    font-size: 1.4rem;
+    color: $primary-color;
+    background-color: $secondary-color;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-weight: bold;
+    display: inline-block;      // Add inline behavior for centering
+  }
+
+  // Input styling
+  .input-field {
+    display: block;
+    width: 90%;                 // Allow room for the parent padding
+    max-width: 400px;           // Optional: Keeps input responsive
+    margin: 10px auto;          // Center the input in the fieldset
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 3px $primary-color;
+    }
+  }
+
+  // Section styling
+  .info-section {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: $text-color;
+    background-color: color.adjust($primary-color, $lightness: 40%);   // Modern replacement for lighten()
+    padding: 10px;
+    border-radius: 4px;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  // Submit button styling
+  .submit-button {
+    margin-top: 20px;
+    background-color: $primary-color;
+    color: $secondary-color;
+    padding: 12px 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: color.adjust($primary-color, $lightness: -20%); // Modern replacement for darken()
+    }
+  }
+}

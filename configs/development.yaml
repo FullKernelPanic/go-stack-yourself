@@ -1,0 +1,9 @@
+app:
+  name: demo-app
+  web:
+    port: 8080
+    basepath: "/app"
+infrastructure:
+  monitoring:
+    enabled: true
+    otel-collector-host: "otel-collector:4317"

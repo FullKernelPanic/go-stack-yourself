@@ -1,0 +1,52 @@
+name: Quality Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Enable BuildKit for better caching
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker-container  # Uses a container driver for caching support
+
+      # Cache Docker layers to speed up builds
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ hashFiles('**/.docker/app/Dockerfile') }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      # Build and load Docker image with caching using `docker buildx`
+      - name: Build Docker image
+        if: success()
+        run: |
+          DOCKER_BUILDKIT=1 docker compose -f docker-compose.test.yml --progress=plain build
+
+      - name: Start container
+        run: |
+          docker compose -f docker-compose.test.yml up app -d --remove-orphans
+
+      # Run unit tests
+      - name: Run unit tests
+        run: docker compose -f docker-compose.test.yml exec app /bin/sh -c "go test ./tests/unit/... -coverprofile=coverage.out -coverpkg=./src/... -v"
+
+      - name: Write total coverage to summary
+        run: |
+          docker compose -f docker-compose.test.yml exec app /bin/sh -c "go tool cover -func=coverage.out -o coverage.txt"
+          total_coverage=$(cat coverage.txt | grep total | sed 's/.*statements)[[:space:]]*\(.*\)/\1/')
+          echo "## Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "Total Coverage: $total_coverage" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY

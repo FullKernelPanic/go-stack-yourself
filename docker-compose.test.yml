@@ -1,0 +1,17 @@
+services:
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: .docker/app/Dockerfile
+      target: test
+      cache_from:
+        - type=local,src=/tmp/.buildx-cache
+        - type=local,src=/tmp/go-mod-cache
+        - type=local,src=/tmp/go-bin-cache
+      cache_to:
+        - type=local,dest=/tmp/.buildx-cache,mode=max
+        - type=local,dest=/tmp/go-mod-cache,mode=max
+        - type=local,dest=/tmp/go-bin-cache,mode=max
+    volumes:
+      - ./:/opt/app/
