@@ -43,8 +43,8 @@ Before setting up the project, ensure you have the following tools installed:
 
 1. **Clone the Repository**:
    ```bash
-   git clone <repository-url>
-   cd <repository-directory>
+   git clone git@github.com:FullKernelPanic/go-stack-yourself.git
+   cd go-stack-yourself
    ```
 
 2. **Build the Project**:
