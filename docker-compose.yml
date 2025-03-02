@@ -1,12 +1,15 @@
 services:
   app:
     container_name: app
+    user: ${CURRENT_USER}
     build:
       target: dev
       context: .
       dockerfile: .docker/app/Dockerfile
     command: >
       air -c .air.app.toml && cd web && npm run build
+    environment:
+      - GOCACHE=/tmp/.cache/go-build
     volumes:
       - ./:/opt/app/
 

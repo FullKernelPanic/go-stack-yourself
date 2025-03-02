@@ -88,5 +88,5 @@ func RolldiceHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func RollHomeHandler(w http.ResponseWriter, r *http.Request) {
-	showDiceRollHome(w, r)
+	_ = showDiceRollHome(w, r)
 }
