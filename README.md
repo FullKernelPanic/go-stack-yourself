@@ -1,91 +1,126 @@
-# go-stack-yourself
+# OpenTelemetry Proof of Concept with Go, Loki, Tempo, Prometheus, and Grafana
 
-**go-stack-yourself** is a **Proof of Concept (PoC)** project demonstrating how to integrate **OpenTelemetry** in a *
-*Golang** application and use the **OpenTelemetry Collector** to route logs, traces, and metrics to various
-observability backends, including **Loki**, **Tempo**, and **Prometheus**.
+This project is a Proof of Concept (PoC) aimed at demonstrating how to implement OpenTelemetry in a Go-based application. It integrates logs, traces, and metrics collection using Loki, Tempo, and Prometheus, visualized through Grafana. The backend is built using Go and `templ`, while the frontend leverages `htmx` and `scss`.
+
+---
+
+## Tech Stack
+
+The project consists of the following components:
+
+- **Backend**: Written in Go using [templ](https://github.com/a-h/templ).
+- **Frontend**: Built with HTML templates, [htmx](https://htmx.org/) for dynamic interactions, and SCSS for styling.
+- **Logs**: Collected using [Loki](https://grafana.com/oss/loki/).
+- **Traces**: Managed using [Tempo](https://grafana.com/oss/tempo/).
+- **Metrics**: Collected using [Prometheus](https://prometheus.io/).
+- **Visualization**: Centralized on [Grafana](https://grafana.com/grafana/).
 
 ---
 
 ## Features
 
-- **OpenTelemetry Integration**: Instrumentation for Golang applications using the OpenTelemetry SDK.
-- **Observability Backends**:
-    - **Loki**: For centralized logging.
-    - **Tempo**: For distributed tracing.
-    - **Prometheus**: For metrics collection and monitoring.
-- **Easy Setup**: Quickly spin up the entire stack with `docker`.
+- **Logs**: Aggregated and stored in Loki.
+- **Traces**: OpenTelemetry-powered distributed tracing visualized in Grafana via Tempo.
+- **Metrics**: Collected from the Go application using Prometheus.
+- **Real-time Monitoring**: Visualize logs, traces, and metrics with Grafana's powerful UI.
+- **Hot Reloading**: Automatically rebuild the Go application inside the Docker container using [Air](https://github.com/air-verse/air).
 
 ---
 
-## Prerequisites
+## Getting Started
 
-Before you begin, ensure you have the following installed on your system:
+### Prerequisites
 
+Before setting up the project, ensure you have the following tools installed:
+
+- [Git](https://git-scm.com/)
 - [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
-- [Go (Golang)](https://go.dev/) (optional, for direct development)
+- [Make](https://www.gnu.org/software/make/)
 
 ---
 
-## Setup Instructions
+### Setup Instructions
 
-Follow the steps below to get the project up and running:
+1. **Clone the Repository**:
+   ```bash
+   git clone <repository-url>
+   cd <repository-directory>
+   ```
 
-### 1. Clone the Repository
+2. **Build the Project**:
+   ```bash
+   make build
+   ```
 
-```bash
-git clone https://github.com/your-username/go-stack-yourself.git
-cd go-stack-yourself
-```
+3. **Start the Stack**:
+   ```bash
+   make up
+   ```
 
-### 2. Start the Observability Stack
+4. **Access the Application**:
+  - **Web UI**: [http://localhost:8081/app/](http://localhost:8081/app/)
+  - **Grafana Dashboard**: [http://localhost:8081/grafana/](http://localhost:8081/grafana/)
 
-Run the following command to start all required components (OpenTelemetry Collector, Loki, Tempo, Prometheus, etc.):
-
-```bash
-docker compose up -d
-```
-
-This will run all containers defined in the `docker-compose.yml` file in detached mode.
-
-### 3. Generate Go code from the templ file
-
-Run the templ generate command.
-
-```bash
-docker compose exec app sh -c "templ generate"
-```
-
-### 4. Run the Application
-
-To run the Golang application with OpenTelemetry instrumentation, use the following command:
-
-```bash
-docker compose exec app sh -c "go run ./cmd/dice"
-```
-
-### Running Tests in the Application Container
-
-To run all the tests located in the `tests/` folder using Docker Compose, you can execute the following command:
-
-```bash
-docker compose exec app sh -c "go test ./tests/..."
-```
-
-This command runs the `go test` tool inside the `app` container, targeting all test files (`*_test.go`) located within
-the `tests/` folder and its subdirectories. It ensures that tests are executed in the same environment as your
-application container, matching the dependencies and configurations defined in the container's setup.
-
-### 5. Application
-
-#### Test Page
-http://localhost:8081/app/
-
-The application will send logs, metrics, and traces to the respective backends.
+5. **Run Automated Tests**:
+   ```bash
+   make run-tests
+   ```
 
 ---
 
-#### 6. Monitoring
+## Development Workflow
 
-- [Grafana](http://localhost:8081/grafana)
-- [Prometheus](http://localhost:8081/prometheus)
+The project is pre-configured to use `Air` inside the Docker container, which automatically monitors file changes and rebuilds the Go application. This ensures efficient development without requiring additional installation on the host machine.
+
+---
+
+## Architecture Overview
+
+1. **Backend**:
+  - Written in Go.
+  - Uses `templ` for HTML templates generation.
+
+2. **Frontend**:
+  - Dynamically updates the UI using `htmx`.
+  - Styled with SCSS.
+
+3. **Instrumentation**:
+  - OpenTelemetry is configured to enable logs, traces, and metrics collection.
+
+4. **Monitoring Components**:
+  - Logs are stored in Loki.
+  - Distributed tracing is managed with Tempo.
+  - Metrics data is gathered by Prometheus.
+  - Grafana visualizes all the collected data for real-time monitoring.
+
+---
+
+## Contributing
+
+Contributions to improve this Proof of Concept are welcome! Feel free to submit issues or pull requests to help enhance the project.
+
+---
+
+## License
+
+This project is open-sourced under an appropriate LICENSE (update this section with a license type).
+
+---
+
+## Acknowledgements
+
+Special thanks to:
+
+- The OpenTelemetry community for enabling effortless observability.
+- The Go ecosystem for an excellent development experience.
+- Grafana, Loki, Tempo, and Prometheus for their robust monitoring tools.
+
+---
+
+## Contact
+
+If you have any questions or feedback, feel free to open an issue or reach out!
+
+---
+
+Happy Monitoring!
