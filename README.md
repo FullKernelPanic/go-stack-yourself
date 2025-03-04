@@ -11,7 +11,7 @@ This project is a Proof of Concept (PoC) aimed at demonstrating how to implement
 The project consists of the following components:
 
 - **Backend**: Written in Go using [templ](https://github.com/a-h/templ).
-- **Frontend**: Built with HTML templates, [htmx](https://htmx.org/) for dynamic interactions, and SCSS for styling.
+- **Frontend**: Built with HTML templates, [htmx](https://htmx.org/) for dynamic interactions, and SCSS for styling. Bundled using [esbuild](https://esbuild.github.io/).
 - **Logs**: Collected using [Loki](https://grafana.com/oss/loki/).
 - **Traces**: Managed using [Tempo](https://grafana.com/oss/tempo/).
 - **Metrics**: Collected using [Prometheus](https://prometheus.io/).
@@ -26,6 +26,7 @@ The project consists of the following components:
 - **Metrics**: Collected from the Go application using Prometheus.
 - **Real-time Monitoring**: Visualize logs, traces, and metrics with Grafana's powerful UI.
 - **Hot Reloading**: Automatically rebuild the Go application inside the Docker container using [Air](https://github.com/air-verse/air).
+- **Frontend Bundling**: JavaScript and SCSS assets are bundled using [esbuild](https://esbuild.github.io/) for optimized performance.
 
 ---
 
@@ -60,8 +61,8 @@ Before setting up the project, ensure you have the following tools installed:
    ```
 
 4. **Access the Application**:
-  - **Web UI**: [http://localhost:8081/app/](http://localhost:8081/app/)
-  - **Grafana Dashboard**: [http://localhost:8081/grafana/](http://localhost:8081/grafana/)
+- **Web UI**: [http://localhost:8081/app/](http://localhost:8081/app/)
+- **Grafana Dashboard**: [http://localhost:8081/grafana/](http://localhost:8081/grafana/)
 
 5. **Run Automated Tests**:
    ```bash
@@ -74,26 +75,28 @@ Before setting up the project, ensure you have the following tools installed:
 
 The project is pre-configured to use `Air` inside the Docker container, which automatically monitors file changes and rebuilds the Go application. This ensures efficient development without requiring additional installation on the host machine.
 
+The frontend assets (JavaScript and SCSS) are bundled and optimized using `esbuild`, which ensures fast builds and compatibility across modern browsers.
+
 ---
 
 ## Architecture Overview
 
 1. **Backend**:
-  - Written in Go.
-  - Uses `templ` for HTML templates generation.
+- Written in Go.
+- Uses `templ` for HTML templates generation.
 
 2. **Frontend**:
-  - Dynamically updates the UI using `htmx`.
-  - Styled with SCSS.
+- Dynamically updates the UI using `htmx`.
+- Styled with SCSS. Bundled and optimized using `esbuild`.
 
 3. **Instrumentation**:
-  - OpenTelemetry is configured to enable logs, traces, and metrics collection.
+- OpenTelemetry is configured to enable logs, traces, and metrics collection.
 
 4. **Monitoring Components**:
-  - Logs are stored in Loki.
-  - Distributed tracing is managed with Tempo.
-  - Metrics data is gathered by Prometheus.
-  - Grafana visualizes all the collected data for real-time monitoring.
+- Logs are stored in Loki.
+- Distributed tracing is managed with Tempo.
+- Metrics data is gathered by Prometheus.
+- Grafana visualizes all the collected data for real-time monitoring.
 
 ---
 
@@ -116,6 +119,7 @@ Special thanks to:
 - The OpenTelemetry community for enabling effortless observability.
 - The Go ecosystem for an excellent development experience.
 - Grafana, Loki, Tempo, and Prometheus for their robust monitoring tools.
+- esbuild for its blazing-fast JavaScript and SCSS bundling capabilities.
 
 ---
 
