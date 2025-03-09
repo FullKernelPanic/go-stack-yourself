@@ -3,13 +3,14 @@ services:
     container_name: app
     user: ${CURRENT_USER}
     build:
-      target: dev
+      target: development
       context: .
       dockerfile: .docker/app/Dockerfile
     command: >
-      air -c .air.app.toml && cd web && npm run build
+      sh -c "npm --prefix /opt/app/web install && npm --prefix /opt/app/web run build && air -c .air.app.toml"
     environment:
       - GOCACHE=/tmp/.cache/go-build
+      - GOPATH=/opt/go
     volumes:
       - ./:/opt/app/
 
